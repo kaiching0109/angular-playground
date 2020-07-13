@@ -6,7 +6,7 @@ import { Ingredient } from 'src/app/shared/ingredient.model';
   templateUrl: './shopping-edit.component.html',
   styleUrls: ['./shopping-edit.component.css']
 })
-export class Shopping{
+export class ShoppingEditComponent implements OnInit{
 
   @ViewChild("nameInput", {static: false}) nameInputRef: ElementRef;
   @ViewChild("amountInput", {static: false}) amountInputRef: ElementRef;
@@ -23,7 +23,5 @@ export class Shopping{
     const newIngredient = new Ingredient(ingName, ingAmount);
     this.ingredientAdded.emit(newIngredient);
   }
-
-
 
 }

@@ -20,7 +20,6 @@ export class DropdownDirective {
     }
 
     @HostListener('click') toggleOpen(eventData: Event) {
-        console.log('hi')
         // if(!this.isOpen)
         //     this.renderer.addClass(this.elRef, 'open');
         // else 

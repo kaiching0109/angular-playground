@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { RecipeService } from 'src/services/recipe.service';
 
 @Component({
@@ -28,10 +28,23 @@ export class RecipeEditComponent implements OnInit {
     console.log(this.recipeForm)
   }
 
+  onAddIngredient() {
+    (<FormArray>this.recipeForm.get('ingredients')).push(
+      new FormGroup({
+        "name": new FormControl(null, Validators.required),
+        "amount": new FormControl(null, [
+          Validators.required,
+          Validators.pattern(/^[1-9]+[0-9]*$/)
+        ]),
+      })
+    )
+  }
+
   private initForm() {
     let recipeName = '';
     let recipeImagePath = '';
     let recipeDescription = '';
+    let recipeIngredients = new FormArray([]);
 
     if(this.editMode) {
       console.log(this.id)
@@ -40,12 +53,25 @@ export class RecipeEditComponent implements OnInit {
       recipeName = recipe?.name;
       recipeImagePath = recipe?.imagePath;
       recipeDescription = recipe?.description;
+      const ingredients = recipe?.ingredients;
+      if(ingredients) {
+        ingredients.forEach(({ name, amount }) => { 
+          recipeIngredients.push(new FormGroup({
+            "name": new FormControl(name, Validators.required),
+            "amount": new FormControl(amount, [
+              Validators.required,
+              Validators.pattern(/^[1-9]+[0-9]*$/)
+            ]),
+          })) 
+        })
+      } 
     }
 
     this.recipeForm = new FormGroup({
-      "name": new FormControl(recipeName),
-      "imagePath": new FormControl(recipeImagePath),
-      "description": new FormControl(recipeDescription),
+      "name": new FormControl(recipeName, Validators.required),
+      "imagePath": new FormControl(recipeImagePath, Validators.required),
+      "description": new FormControl(recipeDescription, Validators.required),
+      "ingredients": recipeIngredients
     })
   }
 

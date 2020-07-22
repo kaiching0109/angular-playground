@@ -18,8 +18,7 @@ export class ShoppingEditComponent implements OnInit{
   constructor(private slService: ShoppingListService) { }
 
   ngOnInit(): void {
-    this.slService.startEditting.subscribe((index: number) => {
-      console.log({ index })
+    this.subscription = this.slService.startEditting.subscribe((index: number) => {
       this.editMode = true;
       this.editedItemIndex = index;
       const ingredientToEdit = this.slService.getIngredient(this.editedItemIndex);

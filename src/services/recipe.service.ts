@@ -43,6 +43,11 @@ export class RecipeService {
         this.recipes.push(recipe);
         this.recipeChanged.next([...this.recipes])
     }
+
+    removeRecipe(index: number) {
+        this.recipes = this.recipes.filter((recipe, i) => i !== index)
+        this.recipeChanged.next([...this.recipes])
+    }
     
     updateRecipe(index: number, recipeToUpdate: Recipe) {
         this.recipes[index] = recipeToUpdate;

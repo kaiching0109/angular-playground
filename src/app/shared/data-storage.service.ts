@@ -12,23 +12,15 @@ export class DataStorageService {
     }
 
     getRecipes() {
-        console.log('123123123')
-        return this.authService.user.pipe(
-        take(1), 
-        exhaustMap(user => {
-            console.log({user})
-            return this.http.get<Recipe[]>('https://ng-complete-guide-94c21.firebaseio.com/recipes.json', {
-                params: new HttpParams().set('auth', user?.token)
+        return this.http.get<Recipe[]>('https://ng-complete-guide-94c21.firebaseio.com/recipes.json').pipe(
+            map(recipes => {
+                console.log('here')
+                return recipes.map(recipe => ({...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []}));
+            }),
+            tap(recipes => {
+                console.log(recipes)
+                this.recipeService.setRecipes(recipes)
             })
-        }),
-        map(recipes => {
-            console.log('here')
-            return recipes.map(recipe => ({...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []}));
-        }),
-        tap(recipes => {
-            console.log(recipes)
-            this.recipeService.setRecipes(recipes)
-        })
         )
     }
 

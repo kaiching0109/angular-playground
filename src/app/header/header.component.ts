@@ -13,11 +13,6 @@ export class HeaderComponent {
     constructor(private dataStorageService: DataStorageService){
 
     }
-    
-    ngOnInit(): void {
-        this.dataStorageService.getRecipes();
-    }
-
 
     onSelect(feature: string) {
         this.featureSelected.emit(feature);
@@ -28,6 +23,6 @@ export class HeaderComponent {
     }
 
     onFetchData() {
-        this.dataStorageService.getRecipes();
+        this.dataStorageService.getRecipes().subscribe();
     }
 }

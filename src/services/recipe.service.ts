@@ -12,7 +12,7 @@ export class RecipeService {
     constructor(private slService: ShoppingListService) { }
     private recipes: Recipe[] = [];
 
-    setRecipes(recipes) {
+    setRecipes(recipes: Recipe[]) {
         this.recipes = recipes;
         this.recipeChanged.next([...this.recipes])
     }

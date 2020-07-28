@@ -1,5 +1,7 @@
-import { Component, EventEmitter, Output, Injectable } from '@angular/core';
+import { Component, EventEmitter, Output, Injectable, OnInit, OnDestroy } from '@angular/core';
 import { DataStorageService } from '../shared/data-storage.service';
+import { AuthService } from '../auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-header',
@@ -9,9 +11,21 @@ import { DataStorageService } from '../shared/data-storage.service';
 export class HeaderComponent {
     collapsed = true;
     @Output() featureSelected = new EventEmitter<string>();
+    userSub: Subscription;
+    isAuthenticated = false;
 
-    constructor(private dataStorageService: DataStorageService){
+    constructor(private dataStorageService: DataStorageService, private authService: AuthService){
 
+    }
+
+    ngOnInit() {
+        this.userSub = this.authService.user.subscribe(user => {
+            this.isAuthenticated = !!user;
+        });
+    }
+
+    ngOnDestry() {
+        this.userSub.unsubscribe();
     }
 
     onSelect(feature: string) {
